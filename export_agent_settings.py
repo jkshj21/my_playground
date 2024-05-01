@@ -15,6 +15,7 @@ agent_id = ""
 
 #Instinate the SCRAPI AGENT CLASS
 agent_obj = Agents(creds_path, agent_id)
+client_options = agent_obj._set_region(agent_id)
 
 #Creating the json format, (4) is a json format
 json_format = types.agent.ExportAgentRequest.DataFormat(4)
@@ -25,7 +26,7 @@ request.name = agent_id
 request.data_format = json_format
 
 #CREATE THE CLIENT
-client = services.agents.AgentsClient(credentials = agent_obj.creds)
+client = services.agents.AgentsClient(credentials = agent_obj.creds, client_options = client_options)
 
 #REQUEST EXPORT AGENT BY CLIENT
 response = client.export_agent(request)
@@ -41,7 +42,6 @@ with open("agent.json", "r") as f:
     print(json.load(f).get("advancedSettings").get("speechSettings"))
 
 
-#PULLING OUT THE SPEECHSETTINGS in FLOWS
 #@title Settings By Flow
 nlu_settings = []
 speech_settings = []
@@ -62,11 +62,10 @@ for flow in os.listdir("./flows"):
         if nlu:
             nlu_settings.append({"displayName" : flow, **nlu})
 
-pd.DataFrame(advanced_settings).to_csv("flow_advanced_settings.csv")
-pd.DataFrame(nlu_settings).to_csv("flow_nlu_settings.csv")
-pd.DataFrame(speech_settings).to_csv("flow_speech_settings.csv")
+flow_advanced_settings_df = pd.DataFrame(advanced_settings)
+flow_nlu_settings_df = pd.DataFrame(nlu_settings)
+flow_speech_settings_df = pd.DataFrame(speech_settings)
 
-#PULLING OUT the SPEECH SETTINGS IN PAGES
 #@title Settings By Page
 nlu_settings = []
 speech_settings = []
@@ -91,6 +90,6 @@ for flow in os.listdir("./flows"):
             nlu_settings.append({"flow" : flow, "page" : page, **nlu})
 
 
-pd.DataFrame(advanced_settings).to_csv("page_advanced_settings.csv")
-pd.DataFrame(nlu_settings).to_csv("page_nlu_settings.csv")
-pd.DataFrame(speech_settings).to_csv("page_speech_settings.csv")
+page_advanced_settings_df = pd.DataFrame(advanced_settings)
+page_nlu_settings_df = pd.DataFrame(nlu_settings)
+page_speech_settings_df = pd.DataFrame(speech_settings)
