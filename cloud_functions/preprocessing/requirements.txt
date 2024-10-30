@@ -1,0 +1,12 @@
+functions-framework==3.*
+marko==2.0.*
+markdownify
+pandas
+numpy
+google-cloud-storage
+more-itertools
+beautifulsoup4
+tqdm==4.66.*
+google-cloud-discoveryengine
+lxml
+pymupdf
