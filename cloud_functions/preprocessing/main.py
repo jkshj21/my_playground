@@ -5,6 +5,7 @@ import multiprocessing
 from tqdm.contrib.concurrent import thread_map
 from contextlib import closing
 import logging
+from gcp_functions import GCPFunctions
 
 REQUIRED_ARGS = [
   "PROJECT_ID",
@@ -41,5 +42,7 @@ def run_preproc(request: flask.Request):
     """
     start_time = time.time()
     request_dict = get_request_to_dict(request=request)
+    gcp_functions = GCPFunctions(request=request_dict)
+    gcp_functions.create_input_metadata()
     
     
